@@ -3,11 +3,13 @@ package com.rui.cursos.models.cursos.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.rui.cursos.models.cursos.entities.Curso;
 import com.rui.cursos.models.cursos.interfaces.CursoRepository;
 import com.rui.cursos.models.cursos.interfaces.CursoService;
 
+@Service
 public class CursoServiceImpl implements CursoService {
 
     @Autowired
