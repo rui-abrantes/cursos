@@ -1,6 +1,7 @@
 package com.rui.cursos.models.cursos.controllers;
 
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,10 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rui.cursos.models.cursos.dtos.CursoRequest;
+import com.rui.cursos.models.cursos.dtos.CursoSpecification;
 import com.rui.cursos.models.cursos.entities.Curso;
 import com.rui.cursos.models.cursos.interfaces.CursoService;
+
+import jakarta.annotation.Nullable;
 
 @RestController
 @RequestMapping("/cursos")
@@ -24,8 +30,17 @@ public class CursoController {
     CursoService cursoService;
 
     @GetMapping
-    public List<Curso> findAll() {
-        return cursoService.findAll();
+    public List<Curso> findAll(@RequestParam @Nullable String name, @RequestParam @Nullable Category categoria) {
+
+        var specification = CursoSpecification.builder();
+
+        if (name != null && !name.isBlank())
+            specification.name(name);
+
+        if (categoria != null)
+            specification.categoria(categoria);
+
+        return cursoService.findAll(specification.build());
     }
 
     @GetMapping("/{id}")
@@ -34,13 +49,13 @@ public class CursoController {
     }
 
     @PostMapping
-    public Curso create(@RequestBody Curso body) {
+    public Curso create(@RequestBody CursoRequest body) {
 
         return cursoService.create(body);
     }
 
     @PutMapping("/{id}")
-    public Curso update(@PathVariable Integer id, @RequestBody Curso body) {
+    public Curso update(@PathVariable Integer id, @RequestBody CursoRequest body) {
         return cursoService.update(id, body);
     }
 
